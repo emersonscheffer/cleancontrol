@@ -1,0 +1,54 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+
+  <!-- Shield -->
+  <path d="M256 40 L420 120 L380 360 L256 460 L132 360 L92 120 Z"
+        fill="none"
+        stroke="#3FA9F5"
+        stroke-width="18"
+        stroke-linejoin="round"/>
+
+  <!-- Gear -->
+  <g transform="translate(256,320) scale(0.9)">
+    <circle r="60" fill="#3FA9F5"/>
+    <g fill="#3FA9F5">
+      <rect x="-10" y="-95" width="20" height="30"/>
+      <rect x="-10" y="65" width="20" height="30"/>
+      <rect x="65" y="-10" width="30" height="20"/>
+      <rect x="-95" y="-10" width="30" height="20"/>
+      <rect x="50" y="-70" width="20" height="30" transform="rotate(45)"/>
+      <rect x="-70" y="50" width="20" height="30" transform="rotate(45)"/>
+      <rect x="-70" y="-70" width="20" height="30" transform="rotate(-45)"/>
+      <rect x="50" y="50" width="20" height="30" transform="rotate(-45)"/>
+    </g>
+    <circle r="28" fill="white"/>
+  </g>
+
+  <!-- Growth arrow chart -->
+  <polyline points="180,300 230,250 270,285 330,210"
+            fill="none"
+            stroke="#2ECC71"
+            stroke-width="18"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+  <polygon points="330,210 318,214 334,226"
+           fill="#2ECC71"/>
+
+  <!-- Broom handle -->
+  <rect x="170" y="110" width="16" height="190"
+        fill="#3FA9F5"
+        transform="rotate(-10 170 110)"/>
+
+  <!-- Broom head -->
+  <path d="M150 290 Q190 260 230 290 L210 320 Q180 330 150 300 Z"
+        fill="#3FA9F5"/>
+
+  <!-- Broom bristles -->
+  <g stroke="#2ECC71" stroke-width="10" stroke-linecap="round">
+    <line x1="160" y1="300" x2="140" y2="330"/>
+    <line x1="180" y1="305" x2="170" y2="340"/>
+    <line x1="200" y1="305" x2="205" y2="340"/>
+    <line x1="220" y1="300" x2="240" y2="330"/>
+  </g>
+
+</svg>
