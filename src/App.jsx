@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       <div>
-        Clean Control
+        Clean Control hello world
       </div>
     </>
   )
