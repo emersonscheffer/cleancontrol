@@ -1,62 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useStore } from "../store/useStore";
-import { addHouse, getHouses } from "../services/database";
+import { getHouses } from "../services/database";
+import HouseCard from "../components/HouseCard";
 
-const Houses = () => {
-
+const Houses = ({ goToDetails }) => {
   const { houses, setHouses } = useStore();
 
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-
   useEffect(() => {
-    loadHouses();
+    load();
   }, []);
 
-  const loadHouses = async () => {
+  const load = async () => {
     const data = await getHouses();
     setHouses(data);
   };
 
-  const handleAdd = async () => {
-
-    await addHouse({ name, address });
-
-    setName("");
-    setAddress("");
-
-    loadHouses();
-
-  };
-
   return (
-
     <div>
-
       <h1>Houses</h1>
 
-      <input
-        placeholder="Client Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-
-      <input
-        placeholder="Address"
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-      />
-
-      <button onClick={handleAdd}>Add House</button>
-
-      <ul>
-        {houses.map((h) => (
-          <li key={h.id}>{h.name} - {h.address}</li>
+      <div className="cardGrid">
+        {houses.map((house) => (
+          <HouseCard
+            key={house.id}
+            house={house}
+            onClick={() => goToDetails(house)}
+          />
         ))}
-      </ul>
-
+      </div>
     </div>
-
   );
 };
 
