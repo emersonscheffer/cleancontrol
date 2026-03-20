@@ -12,7 +12,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { getJobs } from "../services/database";
 
 const locales = {
-  "en-US": enUS
+  "en-US": enUS,
 };
 
 const localizer = dateFnsLocalizer({
@@ -20,11 +20,10 @@ const localizer = dateFnsLocalizer({
   parse,
   startOfWeek,
   getDay,
-  locales
+  locales,
 });
 
 const JobsCalendar = () => {
-
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -32,32 +31,28 @@ const JobsCalendar = () => {
   }, []);
 
   const loadJobs = async () => {
-
     const jobs = await getJobs();
 
-    const formatted = jobs.map(job => ({
-      title: `${job.house} - ${job.cleaner}`,
+    const formatted = jobs.map((job) => ({
+      title: `${job.house} - ${
+        Array.isArray(job.cleaner) ? job.cleaner.join(", ") : job.cleaner
+      }`,
       start: new Date(job.date),
-      end: new Date(job.date)
+      end: new Date(job.date),
     }));
 
     setEvents(formatted);
-
   };
 
   return (
-
-    <div style={{height:"600px"}}>
-
+    <div style={{ height: "600px" }}>
       <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
       />
-
     </div>
-
   );
 };
 

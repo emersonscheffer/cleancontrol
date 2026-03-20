@@ -43,13 +43,11 @@ const HouseDetails = ({ house, goBack }) => {
     }
   };
 
-  
-
   const loadCleaners = async () => {
     const data = await getCleaners();
     setCleanersList(data);
   };
-  
+
   useEffect(() => {
     loadCleaners();
   }, []);

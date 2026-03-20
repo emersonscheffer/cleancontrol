@@ -18,9 +18,20 @@ export const addHouse = async (house) => {
     name: house.name || "",
     address: house.address || "",
     phone: house.phone || "",
+    email: house.email || "",
     price: Number(house.price) || 0,
+
+    rooms: Number(house.rooms) || 0,
+    bathrooms: Number(house.bathrooms) || 0,
+    kitchens: Number(house.kitchens) || 0,
+
+    oven: house.oven || false,
+    laundry: house.laundry || false,
+    refrigerator: house.refrigerator || false,
+
     frequency: house.frequency || "S",
     notes: house.notes || "",
+
     lastCleaners: house.lastCleaners || []
   });
 };
