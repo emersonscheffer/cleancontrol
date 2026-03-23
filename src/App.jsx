@@ -19,12 +19,14 @@ function App() {
   const renderPage = () => {
     switch (page) {
       case "houses":
-        return <Houses
-        goToDetails={(house) => {
-          setSelectedHouse(house);
-          setPage("houseDetails");
-        }}
-      />;
+        return (
+          <Houses
+            goToDetails={(house) => {
+              setSelectedHouse(house);
+              setPage("houseDetails");
+            }}
+          />
+        );
 
       case "cleaners":
         return <Cleaners />;
@@ -57,8 +59,6 @@ function App() {
         goJobs={() => setPage("jobs")}
         goFinances={() => setPage("finances")}
       />
-
-      
 
       <div className="mainContent">{renderPage()}</div>
     </div>

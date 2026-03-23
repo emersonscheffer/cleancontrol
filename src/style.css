@@ -1,12 +1,22 @@
+/* GLOBAL */
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background: #f8fafc;
 }
 
+/* LAYOUT */
+
 .appLayout {
   display: flex;
   height: 100vh;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 40px;
+  overflow: auto;
 }
 
 /* SIDE MENU */
@@ -42,15 +52,7 @@ body {
   background: #475569;
 }
 
-/* CONTENT */
-
-.mainContent {
-  flex: 1;
-  padding: 40px;
-  overflow: auto;
-}
-
-/* DASHBOARD CARDS */
+/* DASHBOARD */
 
 .statsGrid {
   display: flex;
@@ -66,6 +68,8 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* HOUSE CARDS */
+
 .cardGrid {
   display: flex;
   flex-wrap: wrap;
@@ -79,6 +83,12 @@ body {
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.houseCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .cardHeader {
@@ -106,56 +116,91 @@ body {
   margin-top: 30px;
 }
 
-.modalOverlay{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.5);
-  display:flex;
-  justify-content:center;
-  align-items:center;
+/* MODAL */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.modal{
-  background:white;
-  padding:20px;
-  border-radius:10px;
-  width:400px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.modal.large{
-  width:500px;
-  max-height:90vh;
-  overflow:auto;
+.modal.large {
+  width: 500px;
+  max-height: 90vh;
+  overflow: auto;
 }
 
-.section{
-  margin-bottom:15px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+/* FORM SECTIONS */
+
+.section {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.section h4{
-  margin-bottom:5px;
+.section h4 {
+  margin-bottom: 5px;
 }
 
-.actions{
-  display:flex;
-  justify-content:space-between;
-  margin-top:15px;
+/* ACTION BUTTONS */
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
 }
 
-.primary{
-  background:#22c55e;
-  color:white;
-  border:none;
-  padding:10px;
-  border-radius:6px;
-  cursor:pointer;
+.primary {
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.primary:hover {
+  background: #16a34a;
+}
+
+/* DATE WIDGET */
+
+.dateWidget {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 220px;
+}
+
+.dateWidget h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.dateMain {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.week {
+  color: #555;
 }
