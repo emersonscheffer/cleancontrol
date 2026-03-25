@@ -32,7 +32,7 @@ export const addHouse = async (house) => {
     frequency: house.frequency || "S",
     notes: house.notes || "",
 
-    lastCleaners: house.lastCleaners || []
+    lastCleaners: house.lastCleaners || [],
   });
 };
 
@@ -55,7 +55,7 @@ export const updateHouse = async (id, updatedData) => {
     price: Number(updatedData.price),
     frequency: updatedData.frequency,
     notes: updatedData.notes || "",
-    lastCleaners: updatedData.lastCleaners || []
+    lastCleaners: updatedData.lastCleaners || [],
   });
 };
 
@@ -71,7 +71,22 @@ export const deleteHouse = async (id) => {
 export const addCleaner = async (cleaner) => {
   await addDoc(collection(db, "cleaners"), {
     name: cleaner.name || "",
+    wallet: Number(cleaner.wallet) || 0,
   });
+};
+
+export const updateCleaner = async (id, updatedData) => {
+  const ref = doc(db, "cleaners", id);
+
+  await updateDoc(ref, {
+    name: updatedData.name,
+    wallet: Number(updatedData.wallet),
+  });
+};
+
+export const deleteCleaner = async (id) => {
+  const ref = doc(db, "cleaners", id);
+  await deleteDoc(ref);
 };
 
 export const getCleaners = async () => {
