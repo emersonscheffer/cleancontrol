@@ -1,4 +1,5 @@
 import { db } from "../firebase/firebaseConfig";
+ 
 
 import {
   collection,
@@ -7,6 +8,7 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  onSnapshot
 } from "firebase/firestore";
 
 //
@@ -125,6 +127,19 @@ export const getJobs = async () => {
 // 📅 EVENTS
 //
 
+export const subscribeToEvents = (callback) => {
+  const colRef = collection(db, "events");
+
+  return onSnapshot(colRef, (snapshot) => {
+    const events = snapshot.docs.map((docItem) => ({
+      id: docItem.id,
+      ...docItem.data(),
+    }));
+
+    callback(events);
+  });
+};
+
 export const addEvent = async (event) => {
   await addDoc(collection(db, "events"), {
     title: event.title || "",
@@ -136,7 +151,7 @@ export const addEvent = async (event) => {
     cleaner2Pay: Number(event.cleaner2Pay) || 0,
     amount: Number(event.amount) || 0,
     jobDone: event.jobDone || false,
-    payed: event.paid || false,
+    paid: event.paid || false,
     payType: event.payType || "",
   });
 };
@@ -148,4 +163,17 @@ export const getEvents = async () => {
     id: docItem.id,
     ...docItem.data(),
   }));
+};
+
+export const updateEvent = async (id, updatedData) => {
+  const ref = doc(db, "events", id);
+
+  await updateDoc(ref, {
+    ...updatedData,
+  });
+};
+
+export const deleteEvent = async (id) => {
+  const ref = doc(db, "events", id);
+  await deleteDoc(ref);
 };
