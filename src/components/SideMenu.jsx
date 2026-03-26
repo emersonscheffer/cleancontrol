@@ -5,51 +5,36 @@ const SideMenu = ({
   goHouses,
   goCleaners,
   goJobs,
-  goFinances
+  goFinances,
+  goEvents,
 }) => {
   return (
     <div className="sideMenu">
-
       <h2 className="menuTitle">Cleaning Admin</h2>
 
       <div className="menuSection">
-
-        <button onClick={goDashboard}>
-          Dashboard
-        </button>
-
+        <button onClick={goDashboard}>Dashboard</button>
       </div>
 
       <hr />
 
       <div className="menuSection">
-
         <h4>Add +</h4>
 
-        <button onClick={goHouses}>
-          + House
-        </button>
+        <button onClick={goHouses}>+ House</button>
 
-        <button onClick={goCleaners}>
-          + Cleaner
-        </button>
-
+        <button onClick={goCleaners}>+ Cleaner</button>
       </div>
 
       <hr />
 
       <div className="menuSection">
+        <button onClick={goJobs}>Cleaning Jobs</button>
 
-        <button onClick={goJobs}>
-          Cleaning Jobs
-        </button>
+        <button onClick={goFinances}>Finances</button>
 
-        <button onClick={goFinances}>
-          Finances
-        </button>
-
+        <button onClick={goEvents}>Events</button>
       </div>
-
     </div>
   );
 };

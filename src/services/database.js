@@ -120,3 +120,32 @@ export const getJobs = async () => {
     ...docItem.data(),
   }));
 };
+
+//
+// 📅 EVENTS
+//
+
+export const addEvent = async (event) => {
+  await addDoc(collection(db, "events"), {
+    title: event.title || "",
+    date: event.date || "",
+    description: event.description || "",
+    cleaner1: event.cleaner1 || "",
+    cleaner2: event.cleaner2 || "",
+    cleaner1Pay: Number(event.cleaner1Pay) || 0,
+    cleaner2Pay: Number(event.cleaner2Pay) || 0,
+    amount: Number(event.amount) || 0,
+    jobDone: event.jobDone || false,
+    payed: event.paid || false,
+    payType: event.payType || "",
+  });
+};
+
+export const getEvents = async () => {
+  const snapshot = await getDocs(collection(db, "events"));
+
+  return snapshot.docs.map((docItem) => ({
+    id: docItem.id,
+    ...docItem.data(),
+  }));
+};
