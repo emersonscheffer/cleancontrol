@@ -103,7 +103,7 @@ const Events = () => {
     <div style={{ padding: "20px" }}>
       <h1>Events</h1>
 
-    <div style={{ width:"375px", height:"60px", backgroundColor:"orange"}}></div>
+    <div style={{ width:"450px", height:"80px", backgroundColor:"orange", borderRadius:"5px"}}></div>
 
 
       <button onClick={() => setIsModalOpen(true)}>Add Event</button>
