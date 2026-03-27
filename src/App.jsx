@@ -11,6 +11,8 @@ import Events from "./pages/Events";
 
 import HouseDetails from "./pages/HouseDetails";
 
+import "./assets/css/reset.css"
+
 import "./style.css";
 
 import { useStore } from "./store/useStore";

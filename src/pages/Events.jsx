@@ -3,28 +3,26 @@ import EventItem from "../components/EventItem";
 
 import AddEventModal from "../components/AddEventModal";
 
-
 import {
   getEvents,
   addEvent,
   updateEvent,
   deleteEvent,
-  subscribeToEvents
+  subscribeToEvents,
 } from "../services/database";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
 
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSaveEvent = async (eventData) => {
-  try {
-    await addEvent(eventData);
-  } catch (error) {
-    console.error("Error saving event:", error);
-  }
-};
+    try {
+      await addEvent(eventData);
+    } catch (error) {
+      console.error("Error saving event:", error);
+    }
+  };
 
   // 🔹 Fetch events from database
   const fetchEvents = async () => {
@@ -103,8 +101,19 @@ const Events = () => {
     <div style={{ padding: "20px" }}>
       <h1>Events</h1>
 
-    <div style={{ width:"450px", height:"80px", backgroundColor:"orange", borderRadius:"5px"}}></div>
+      <div
+        style={{
+          width: "450px",
+          height: "80px",
+          backgroundColor: "orange",
+          borderRadius: "5px",
+          display:"grid"
+        }}
+      >
 
+
+
+      </div>
 
       <button onClick={() => setIsModalOpen(true)}>Add Event</button>
 
@@ -122,14 +131,11 @@ const Events = () => {
         ))
       )}
 
-
-<AddEventModal
-  isOpen={isModalOpen}
-  onClose={() => setIsModalOpen(false)}
-  onSave={handleSaveEvent}
-/>
-
-
+      <AddEventModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveEvent}
+      />
     </div>
   );
 };
