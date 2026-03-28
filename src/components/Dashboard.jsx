@@ -22,11 +22,11 @@ const Dashboard = () => {
           borderRadius: "5px",
           display: "grid",
           gridTemplate: `
-              ". ......... . . " 5px
-              ". house-name . ." 1fr
+              ". .......... . . . . . " 5px
+              ". house-name cleaner1 cleaner2 amount profit ." 1fr
               ". event-date . ." 1fr
               ". edit-btn . ." 1fr
-              " . ......... . . " 5px
+              ". ......... . . . . . " 5px
               / 5px 100px 1fr 5px
           `,
         }}
