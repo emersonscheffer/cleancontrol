@@ -1,147 +1,11 @@
-/* .event-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  transition: 0.2s ease;
-}
-
-.event-card:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-
-.event-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.event-title {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.event-date {
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.event-description {
-  color: #4b5563;
-  margin: 10px 0;
-}
-
-.event-cleaners {
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.event-total {
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.event-paytype {
-  font-size: 13px;
-  color: #6b7280;
-}
-
-.badges {
-  display: flex;
-  gap: 8px;
-  margin: 12px 0;
-}
-
-.badge {
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.badge-green {
-  background: #dcfce7;
-  color: #15803d;
-}
-
-.badge-red {
-  background: #fee2e2;
-  color: #b91c1c;
-}
-
-.badge-yellow {
-  background: #fef9c3;
-  color: #a16207;
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.btn-blue {
-  background: #3b82f6;
-}
-
-.btn-blue:hover {
-  background: #2563eb;
-}
-
-.btn-green {
-  background: #22c55e;
-}
-
-.btn-green:hover {
-  background: #16a34a;
-}
-
-.btn-red {
-  background: #ef4444;
-}
-
-.btn-red:hover {
-  background: #dc2626;
-} */
-
 /* 
-///////////////////////////////// */
-
-/* $ 60 */
-/* 
-position: absolute;
-width: 23px;
-height: 12px;
-
-font-family: 'Inter';
-font-style: normal;
-font-weight: 700;
-font-size: 10px;
-line-height: 12px;
-
-color: #00AE26; */
-
 .event-card {
   background: #f5f5f5;
   border-radius: 10px;
   padding: 0;
   width: 450px;
   height: auto;
-  /* margin-bottom: 16px; */
-  /* border: 1px solid #e5e7eb; */
-  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); */
-  /* transition: 0.2s ease; */
+  
   display: grid;
   grid-template:
     ". ....... ...... ...... ....... .......... ....... ......... . " 5px
@@ -262,3 +126,148 @@ color: #00AE26; */
   line-height: 15px;
   color: #000000;
 } 
+
+.done-btn,
+.paid-btn {
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.done-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.done-btn.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.paid-btn {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.paid-btn.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+ */
+
+
+
+
+
+.event-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #e5e7eb;
+}
+
+/* HEADER */
+.house-name {
+  grid-column: span 2;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.event-date {
+  grid-column: span 2;
+  text-align: right;
+  color: gray;
+}
+
+.profit {
+  grid-column: span 2;
+  font-weight: bold;
+  color: #16a34a;
+}
+
+.house-price {
+  grid-column: span 2;
+  text-align: right;
+}
+
+/* CLEANERS */
+.cleaners-container {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cleaner-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: #f9fafb;
+  padding: 8px;
+  border-radius: 8px;
+  align-items: center;
+}
+
+.cleaner-title {
+  font-weight: 500;
+}
+
+.cleaner-name {
+  color: #374151;
+}
+
+.cleaner-amount {
+  font-weight: 500;
+}
+
+.cleaner-percentage {
+  text-align: right;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* BUTTONS */
+.done-btn,
+.paid-btn {
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.done-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.done-btn.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.paid-btn {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.paid-btn.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* DELETE */
+.edit-btn {
+  grid-column: span 4;
+  text-align: center;
+  cursor: pointer;
+  color: white;
+  background: #ef4444;
+  padding: 6px;
+  border-radius: 8px;
+}

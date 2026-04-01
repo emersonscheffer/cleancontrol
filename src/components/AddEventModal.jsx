@@ -1,41 +1,107 @@
-import React, { useState } from "react";
-
-import "../assets/css/AddEventModal.css"
-
+import React, { useEffect, useState } from "react";
+import "../assets/css/AddEventModal.css";
+import { getHouses, getCleaners } from "../services/database";
 
 const AddEventModal = ({ isOpen, onClose, onSave }) => {
+  const [houses, setHouses] = useState([]);
+  const [cleaners, setCleaners] = useState([]);
+
   const [form, setForm] = useState({
-    title: "",
+    houseId: "",
+    houseName: "",
     date: "",
     description: "",
-    cleaner1: "",
-    cleaner2: "",
-    cleaner1Pay: "",
-    cleaner2Pay: "",
-    amount: "",
+    housePrice: 0,
+    cleanersList: [],
     payType: "cash",
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const housesData = await getHouses();
+      const cleanersData = await getCleaners();
+      setHouses(housesData);
+      setCleaners(cleanersData);
+    };
+
+    if (isOpen) fetchData();
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  // 🔥 Select house
+  const handleHouseChange = (e) => {
+    const selected = houses.find((h) => h.id === e.target.value);
+
+    if (!selected) return;
+
     setForm((prev) => ({
       ...prev,
-      [name]: value,
+      houseId: selected.id,
+      houseName: selected.name,
+      housePrice: selected.price,
+      cleanersList: (selected.lastCleaners || []).map((name) => ({
+        name,
+        amount: 0,
+        percentage: 0,
+      })),
     }));
   };
+
+  // 🔥 Update cleaner values
+  const updateCleaner = (index, field, value) => {
+    const updated = [...form.cleanersList];
+
+    if (field === "percentage") {
+      const percentage = Number(value);
+      updated[index].percentage = percentage;
+      updated[index].amount = (percentage / 100) * form.housePrice;
+    }
+
+    if (field === "amount") {
+      const amount = Number(value);
+      updated[index].amount = amount;
+      updated[index].percentage =
+        form.housePrice > 0 ? (amount / form.housePrice) * 100 : 0;
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      cleanersList: updated,
+    }));
+  };
+
+  // 🔥 Add cleaner manually
+  const addCleaner = (name) => {
+    setForm((prev) => ({
+      ...prev,
+      cleanersList: [
+        ...prev.cleanersList,
+        { name, amount: 0, percentage: 0 },
+      ],
+    }));
+  };
+
+  // 🔥 Total cleaner pay
+  const totalCleanerPay = form.cleanersList.reduce(
+    (sum, c) => sum + (c.amount || 0),
+    0
+  );
+
+  const profit = form.housePrice - totalCleanerPay;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     await onSave({
-      ...form,
-      cleaner1Pay: Number(form.cleaner1Pay),
-      cleaner2Pay: Number(form.cleaner2Pay),
-      amount: Number(form.amount),
+      houseName: form.houseName,
+      date: form.date,
+      description: form.description,
+      housePrice: Number(form.housePrice),
+      cleanersList: form.cleanersList,
       jobDone: false,
       paid: false,
+      payType: form.payType,
     });
 
     onClose();
@@ -47,19 +113,88 @@ const AddEventModal = ({ isOpen, onClose, onSave }) => {
         <h2>Add Event</h2>
 
         <form onSubmit={handleSubmit}>
-          <input name="title" placeholder="Title" onChange={handleChange} required />
-          <input name="date" type="date" onChange={handleChange} required />
-          <textarea name="description" placeholder="Description" onChange={handleChange} />
+          {/* HOUSE SELECT */}
+          <select onChange={handleHouseChange} required>
+            <option value="">Select House</option>
+            {houses.map((h) => (
+              <option key={h.id} value={h.id}>
+                {h.name}
+              </option>
+            ))}
+          </select>
 
-          <input name="cleaner1" placeholder="Cleaner 1" onChange={handleChange} />
-          <input name="cleaner2" placeholder="Cleaner 2" onChange={handleChange} />
+          <input
+            type="date"
+            onChange={(e) =>
+              setForm({ ...form, date: e.target.value })
+            }
+            required
+          />
 
-          <input name="cleaner1Pay" type="number" placeholder="Cleaner 1 Pay" onChange={handleChange} />
-          <input name="cleaner2Pay" type="number" placeholder="Cleaner 2 Pay" onChange={handleChange} />
+          <textarea
+            placeholder="Description"
+            onChange={(e) =>
+              setForm({ ...form, description: e.target.value })
+            }
+          />
 
-          <input name="amount" type="number" placeholder="Total Amount" onChange={handleChange} />
+          {/* HOUSE PRICE */}
+          <input
+            type="number"
+            value={form.housePrice}
+            onChange={(e) =>
+              setForm({ ...form, housePrice: Number(e.target.value) })
+            }
+            placeholder="House Price"
+          />
 
-          <select name="payType" onChange={handleChange}>
+          {/* CLEANERS SELECT */}
+          <select onChange={(e) => addCleaner(e.target.value)}>
+            <option value="">Add Cleaner</option>
+            {cleaners.map((c) => (
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+
+          {/* CLEANERS LIST */}
+          <div className="cleaners-list">
+            {form.cleanersList.map((c, index) => (
+              <div key={index} className="cleaner-row">
+                <span>{c.name}</span>
+
+                <input
+                  type="number"
+                  placeholder="Amount"
+                  value={c.amount}
+                  onChange={(e) =>
+                    updateCleaner(index, "amount", e.target.value)
+                  }
+                />
+
+                <input
+                  type="number"
+                  placeholder="%"
+                  value={c.percentage}
+                  onChange={(e) =>
+                    updateCleaner(index, "percentage", e.target.value)
+                  }
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* PROFIT */}
+          <div className="profit-box">
+            Profit: ${profit.toFixed(2)}
+          </div>
+
+          <select
+            onChange={(e) =>
+              setForm({ ...form, payType: e.target.value })
+            }
+          >
             <option value="cash">Cash</option>
             <option value="zelle">Zelle</option>
             <option value="venmo">Venmo</option>
@@ -68,7 +203,9 @@ const AddEventModal = ({ isOpen, onClose, onSave }) => {
 
           <div className="modal-actions">
             <button type="submit">Save</button>
-            <button type="button" onClick={onClose}>Cancel</button>
+            <button type="button" onClick={onClose}>
+              Cancel
+            </button>
           </div>
         </form>
       </div>
