@@ -18,7 +18,7 @@ const Dashboard = () => {
       
 
 
-        <EventItem />
+        {/* <EventItem /> */}
 
     </div>
   );

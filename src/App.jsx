@@ -6,6 +6,7 @@ import Houses from "./pages/Houses";
 import Cleaners from "./pages/Cleaners";
 import Jobs from "./pages/Jobs";
 import Finances from "./pages/Finances";
+import CleanerDetails from "./pages/CleanerDetails";
 
 import Events from "./pages/Events";
 
@@ -23,8 +24,9 @@ import { getEvents } from "./services/database";
 
 
 function App() {
+  const { cleaners, setCleaners } = useStore();
 
-const [events, setEvents] = useState();
+  const [events, setEvents] = useState();
 
 // useStore((state) => {
 //   setEvents(state.events);
@@ -42,6 +44,7 @@ const loadEvents = async () => {
   const [page, setPage] = useState("dashboard");
 
   const [selectedHouse, setSelectedHouse] = useState(null);
+  const [selectedCleaner, setSelectedCleaner] = useState(null);
 
   const renderPage = () => {
     switch (page) {
@@ -56,7 +59,14 @@ const loadEvents = async () => {
         );
 
       case "cleaners":
-        return <Cleaners />;
+        return (
+          <Cleaners
+            goToDetails={(cleaner) => {
+              setSelectedCleaner(cleaner);
+              setPage("cleanerDetails");
+            }}
+          />
+        );
 
       case "jobs":
         return <Jobs />;
@@ -72,8 +82,28 @@ const loadEvents = async () => {
           />
         );
 
-        case "events":
-         return <Events events={events} />;
+      case "cleanerDetails":
+        return (
+          <CleanerDetails
+            cleaner={selectedCleaner}
+            goBack={() => setPage("cleaners")}
+            onUpdated={(cleaner) => {
+              setSelectedCleaner(cleaner);
+              setCleaners(
+                cleaners.map((item) =>
+                  item.id === cleaner.id ? cleaner : item
+                )
+              );
+            }}
+            onDeleted={(cleanerId) => {
+              setSelectedCleaner(null);
+              setCleaners(cleaners.filter((item) => item.id !== cleanerId));
+            }}
+          />
+        );
+
+      case "events":
+        return <Events events={events} />;
 
       default:
         return <Dashboard />;

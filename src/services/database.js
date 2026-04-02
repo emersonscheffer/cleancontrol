@@ -8,6 +8,7 @@ import {
   updateDoc,
   deleteDoc,
   onSnapshot,
+  arrayUnion,
 } from "firebase/firestore";
 
 //
@@ -34,8 +35,6 @@ export const addHouse = async (house) => {
     notes: house.notes || "",
 
     lastCleaners: house.lastCleaners || [],
-
-    notes: house.notes || "",
     paymentHistory: house.paymentHistory || [],
 
     payMethod: house.payMethod || "",
@@ -72,13 +71,14 @@ export const deleteHouse = async (id) => {
 };
 
 //
-// 🧹 CLEANERS
+// 🧹 CLEANERS //////////////////////////////////////////////////////////////////////////////////////////
 //
 
 export const addCleaner = async (cleaner) => {
   await addDoc(collection(db, "cleaners"), {
     name: cleaner.name || "",
     wallet: Number(cleaner.wallet) || 0,
+    jobList: cleaner.jobList || [],
   });
 };
 
@@ -88,6 +88,7 @@ export const updateCleaner = async (id, updatedData) => {
   await updateDoc(ref, {
     name: updatedData.name,
     wallet: Number(updatedData.wallet),
+    jobList: updatedData.jobList || [],
   });
 };
 
@@ -104,6 +105,12 @@ export const getCleaners = async () => {
     ...docItem.data(),
   }));
 };
+
+
+
+
+
+
 
 //
 // 📅 JOBS
@@ -156,6 +163,29 @@ export const addEvent = async (event) => {
     payType: event.payType || "",
     notes: event.notes || "",
   });
+
+  const time = event.timeOfCleaning
+    ? `${event.timeOfCleaning.timeHour || ""}:${event.timeOfCleaning.timeMinute || ""} ${event.timeOfCleaning.timePeriod || ""}`.trim()
+    : "";
+
+  const cleanerUpdates = (event.cleanersList || []).filter(
+    (cleaner) => cleaner?.id,
+  );
+
+  await Promise.all(
+    cleanerUpdates.map((cleaner) =>
+      updateDoc(doc(db, "cleaners", cleaner.id), {
+        jobList: arrayUnion({
+          date: event.date || "",
+          time,
+          houseName: event.house?.name || "",
+          cleanerAmount: Number(cleaner.amount) || 0,
+          jobDone: false,
+          received: false,
+        }),
+      }),
+    ),
+  );
 };
 
 export const getEvents = async () => {

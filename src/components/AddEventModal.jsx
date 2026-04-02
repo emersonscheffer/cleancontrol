@@ -41,16 +41,26 @@ const AddEventModal = ({ isOpen, onClose, onSave }) => {
 
     if (!selected) return;
 
+    const mappedLastCleaners = (selected.lastCleaners || [])
+      .map((name) => {
+        const matchedCleaner = cleaners.find((cleaner) => cleaner.name === name);
+
+        if (!matchedCleaner) return null;
+
+        return {
+          id: matchedCleaner.id,
+          name: matchedCleaner.name,
+          amount: 0,
+          percentage: 0,
+        };
+      })
+      .filter(Boolean);
+
     setForm((prev) => ({
       ...prev,
       houseId: selected.id,
       house: { name: selected.name, price: selected.price },
-
-      cleanersList: (selected.lastCleaners || []).map((name) => ({
-        name,
-        amount: 0,
-        percentage: 0,
-      })),
+      cleanersList: mappedLastCleaners,
     }));
   };
 
@@ -78,10 +88,28 @@ const AddEventModal = ({ isOpen, onClose, onSave }) => {
   };
 
   // 🔥 Add cleaner manually
-  const addCleaner = (name) => {
+  const addCleaner = (cleanerId) => {
+    if (!cleanerId) return;
+
+    const selectedCleaner = cleaners.find((cleaner) => cleaner.id === cleanerId);
+
+    if (!selectedCleaner) return;
+
     setForm((prev) => ({
       ...prev,
-      cleanersList: [...prev.cleanersList, { name, amount: 0, percentage: 0 }],
+      cleanersList: prev.cleanersList.some(
+        (cleaner) => cleaner.id === selectedCleaner.id,
+      )
+        ? prev.cleanersList
+        : [
+            ...prev.cleanersList,
+            {
+              id: selectedCleaner.id,
+              name: selectedCleaner.name,
+              amount: 0,
+              percentage: 0,
+            },
+          ],
     }));
   };
 
@@ -212,7 +240,7 @@ const AddEventModal = ({ isOpen, onClose, onSave }) => {
           <select onChange={(e) => addCleaner(e.target.value)}>
             <option value="">Add Cleaner</option>
             {cleaners.map((c) => (
-              <option key={c.id} value={c.name}>
+              <option key={c.id} value={c.id}>
                 {c.name}
               </option>
             ))}
