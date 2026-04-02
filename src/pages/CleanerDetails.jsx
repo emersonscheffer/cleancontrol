@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { deleteCleaner, updateCleaner } from "../services/database";
+import JobList from "../components/JobList";
 
 const CleanerDetails = ({ cleaner, goBack, onUpdated, onDeleted }) => {
   const [editMode, setEditMode] = useState(false);
@@ -104,6 +105,11 @@ const CleanerDetails = ({ cleaner, goBack, onUpdated, onDeleted }) => {
           {deleting ? "Deleting..." : "Delete Cleaner"}
         </button>
       )}
+
+
+      <JobList jobs={cleaner.jobList}/>
+
+
     </div>
   );
 };

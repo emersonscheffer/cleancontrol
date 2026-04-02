@@ -1,0 +1,33 @@
+.job-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  background: #fff;
+}
+
+.job-date-time {
+  font-size: 14px;
+  color: #333;
+}
+
+.job-house-name {
+  font-size: 14px;
+  color: #333;
+  flex-grow: 1;
+  margin-left: 20px;
+}
+
+.pay-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pay-button:hover {
+  background: #0056b3;
+}
