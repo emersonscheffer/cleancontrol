@@ -5,11 +5,6 @@ import { deleteHouse } from "../services/database";
 
 import { getCleaners } from "../services/database";
 
-const handleDelete = async () => {
-  await deleteHouse(house.id);
-  goBack();
-};
-
 const HouseDetails = ({ house, goBack }) => {
   if (!house) return <div>Loading...</div>;
 
@@ -52,6 +47,16 @@ const HouseDetails = ({ house, goBack }) => {
     loadCleaners();
   }, []);
 
+  const handleDelete = async () => {
+    try {
+      await deleteHouse(house.id);
+      goBack();
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting house");
+    }
+  };
+
   return (
     <div>
       <button onClick={goBack}>← Back</button>
@@ -64,6 +69,18 @@ const HouseDetails = ({ house, goBack }) => {
           <input name="address" value={form.address} onChange={handleChange} />
           <input name="phone" value={form.phone} onChange={handleChange} />
           <input name="price" value={form.price} onChange={handleChange} />
+          <select
+            name="payMethod"
+            value={form.payMethod || ""}
+            onChange={handleChange}
+          >
+            <option value="">Select Pay Method</option>
+            <option value="Card">Card</option>
+            <option value="Cash">Cash</option>
+            <option value="Square">Square</option>
+            <option value="Venmo">Venmo</option>
+            <option value="Zelle">Zelle</option>
+          </select>
 
           <select
             name="frequency"
@@ -120,6 +137,7 @@ const HouseDetails = ({ house, goBack }) => {
           <p>{house.address}</p>
           <p>{house.phone}</p>
           <p>${house.price}</p>
+          <p>Pay Method: {house.payMethod || "None"}</p>
           <p>Frequency: {house.frequency}</p>
 
           <p>

@@ -19,7 +19,7 @@ const HouseCard = ({ house, onClick }) => {
   return (
     <div className="houseCard" onClick={onClick}>
       <div className="cardHeader">
-        <h3>{house.name}</h3>
+        <h3 style={{ fontSize: "1.2rem", fontWeight: 700 }}>{house.name}</h3>
 
         <div
           className="freqBox"
@@ -32,6 +32,10 @@ const HouseCard = ({ house, onClick }) => {
       <p>{house.address}</p>
 
       <p>{house.phone}</p>
+
+      <p>Pay Method: {house.payMethod || "None"}</p>
+
+      {house.notes ? <p>{house.notes}</p> : null}
 
       <p>
         Cleaners:{" "}

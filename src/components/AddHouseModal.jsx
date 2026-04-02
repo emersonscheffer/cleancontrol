@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { addHouse, getCleaners } from "../services/database";
 
-const AddHouseModal = ({ onClose, onAdded }) => {
+const formatPhoneNumber = (value) => {
+  const digitsOnly = value.replace(/\D/g, "").slice(0, 10);
+  const first = digitsOnly.slice(0, 3);
+  const second = digitsOnly.slice(3, 6);
+  const third = digitsOnly.slice(6, 10);
 
+  if (digitsOnly.length <= 3) return first;
+  if (digitsOnly.length <= 6) return `${first} ${second}`;
+  return `${first} ${second} ${third}`;
+};
+
+const AddHouseModal = ({ onClose, onAdded }) => {
   const [cleaners, setCleaners] = useState([]);
 
   const [form, setForm] = useState({
@@ -11,6 +21,7 @@ const AddHouseModal = ({ onClose, onAdded }) => {
     phone: "",
     email: "",
     price: "",
+    payMethod: "Cash",
     rooms: "",
     bathrooms: "",
     kitchens: "",
@@ -18,7 +29,8 @@ const AddHouseModal = ({ onClose, onAdded }) => {
     laundry: false,
     refrigerator: false,
     frequency: "S",
-    lastCleaners: ["", ""]
+    lastCleaners: ["", ""],
+    notes: "",
   });
 
   useEffect(() => {
@@ -33,9 +45,17 @@ const AddHouseModal = ({ onClose, onAdded }) => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
+    if (name === "phone") {
+      setForm({
+        ...form,
+        phone: formatPhoneNumber(value),
+      });
+      return;
+    }
+
     setForm({
       ...form,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
@@ -45,17 +65,16 @@ const AddHouseModal = ({ onClose, onAdded }) => {
 
     setForm({
       ...form,
-      lastCleaners: updated
+      lastCleaners: updated,
     });
   };
 
   const handleSubmit = async () => {
-
     const cleanedCleaners = form.lastCleaners.filter(Boolean);
 
     await addHouse({
       ...form,
-      lastCleaners: cleanedCleaners
+      lastCleaners: cleanedCleaners,
     });
 
     onAdded();
@@ -63,11 +82,8 @@ const AddHouseModal = ({ onClose, onAdded }) => {
   };
 
   return (
-
     <div className="modalOverlay">
-
       <div className="modal large">
-
         <h2>Add New House</h2>
 
         {/* CONTACT */}
@@ -75,10 +91,21 @@ const AddHouseModal = ({ onClose, onAdded }) => {
         <div className="section">
           <h4>Contact Info</h4>
 
-          <input name="name" placeholder="Contact Name" onChange={handleChange}/>
-          <input name="address" placeholder="Address" onChange={handleChange}/>
-          <input name="phone" placeholder="Telephone" onChange={handleChange}/>
-          <input name="email" placeholder="Email" onChange={handleChange}/>
+          <input
+            name="name"
+            placeholder="Contact Name"
+            onChange={handleChange}
+          />
+          <input name="address" placeholder="Address" onChange={handleChange} />
+          <input
+            name="phone"
+            placeholder="Telephone"
+            value={form.phone}
+            onChange={handleChange}
+            inputMode="numeric"
+            maxLength={12}
+          />
+          <input name="email" placeholder="Email" onChange={handleChange} />
         </div>
 
         {/* PROPERTY */}
@@ -86,10 +113,38 @@ const AddHouseModal = ({ onClose, onAdded }) => {
         <div className="section">
           <h4>Property Details</h4>
 
-          <input name="rooms" placeholder="Rooms" onChange={handleChange}/>
-          <input name="bathrooms" placeholder="Bathrooms" onChange={handleChange}/>
-          <input name="kitchens" placeholder="Kitchens" onChange={handleChange}/>
-          <input name="price" placeholder="Price" onChange={handleChange}/>
+          <input name="rooms" placeholder="Rooms" onChange={handleChange} />
+          <input
+            name="bathrooms"
+            placeholder="Bathrooms"
+            onChange={handleChange}
+          />
+          <input
+            name="kitchens"
+            placeholder="Kitchens"
+            onChange={handleChange}
+          />
+          <input name="price" placeholder="Price" onChange={handleChange} />
+          <select
+            name="payMethod"
+            value={form.payMethod}
+            onChange={handleChange}
+          >
+            <option value="Card">Card</option>
+            <option value="Cash">Cash</option>
+            <option value="Square">Square</option>
+            <option value="Venmo">Venmo</option>
+            <option value="Zelle">Zelle</option>
+          </select>
+        </div>
+
+        <div className="section">
+          <h4>Notes</h4>
+          <textarea
+            name="notes"
+            placeholder="Additional Notes"
+            onChange={handleChange}
+          />
         </div>
 
         {/* EXTRAS */}
@@ -97,9 +152,21 @@ const AddHouseModal = ({ onClose, onAdded }) => {
         <div className="section">
           <h4>Extras</h4>
 
-          <label><input type="checkbox" name="oven" onChange={handleChange}/> Oven</label>
-          <label><input type="checkbox" name="laundry" onChange={handleChange}/> Laundry</label>
-          <label><input type="checkbox" name="refrigerator" onChange={handleChange}/> Refrigerator</label>
+          <label>
+            <input type="checkbox" name="oven" onChange={handleChange} /> Oven
+          </label>
+          <label>
+            <input type="checkbox" name="laundry" onChange={handleChange} />{" "}
+            Laundry
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="refrigerator"
+              onChange={handleChange}
+            />{" "}
+            Refrigerator
+          </label>
         </div>
 
         {/* FREQUENCY */}
@@ -107,7 +174,11 @@ const AddHouseModal = ({ onClose, onAdded }) => {
         <div className="section">
           <h4>Cleaning Frequency</h4>
 
-          <select name="frequency" onChange={handleChange} value={form.frequency}>
+          <select
+            name="frequency"
+            onChange={handleChange}
+            value={form.frequency}
+          >
             <option value="W">Weekly</option>
             <option value="B">Biweekly</option>
             <option value="M">Monthly</option>
@@ -120,17 +191,21 @@ const AddHouseModal = ({ onClose, onAdded }) => {
         <div className="section">
           <h4>Last Cleaner Team</h4>
 
-          <select onChange={(e)=>handleCleanerChange(0, e.target.value)}>
+          <select onChange={(e) => handleCleanerChange(0, e.target.value)}>
             <option value="">None</option>
-            {cleaners.map(c => (
-              <option key={c.id} value={c.name}>{c.name}</option>
+            {cleaners.map((c) => (
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
             ))}
           </select>
 
-          <select onChange={(e)=>handleCleanerChange(1, e.target.value)}>
+          <select onChange={(e) => handleCleanerChange(1, e.target.value)}>
             <option value="">None</option>
-            {cleaners.map(c => (
-              <option key={c.id} value={c.name}>{c.name}</option>
+            {cleaners.map((c) => (
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
             ))}
           </select>
         </div>
@@ -138,19 +213,13 @@ const AddHouseModal = ({ onClose, onAdded }) => {
         {/* ACTIONS */}
 
         <div className="actions">
-
           <button className="primary" onClick={handleSubmit}>
             Add House
           </button>
 
-          <button onClick={onClose}>
-            Cancel
-          </button>
-
+          <button onClick={onClose}>Cancel</button>
         </div>
-
       </div>
-
     </div>
   );
 };

@@ -40,28 +40,28 @@ const Events = () => {
   }, []);
 
   // 🔹 Add event
-  const handleAddEvent = async () => {
-    const newEvent = {
-      title: "New Cleaning Job",
-      date: new Date().toLocaleDateString(),
-      description: "New job description",
-      cleaner1: "Cleaner A",
-      cleaner2: "Cleaner B",
-      cleaner1Pay: 50,
-      cleaner2Pay: 50,
-      amount: 150,
-      jobDone: false,
-      paid: false,
-      payType: "cash",
-    };
+  // const handleAddEvent = async () => {
+  //   const newEvent = {
+  //     title: "New Cleaning Job",
+  //     date: new Date().toLocaleDateString(),
+  //     description: "New job description",
+  //     cleaner1: "Cleaner A",
+  //     cleaner2: "Cleaner B",
+  //     cleaner1Pay: 50,
+  //     cleaner2Pay: 50,
+  //     amount: 150,
+  //     jobDone: false,
+  //     paid: false,
+  //     payType: "cash",
+  //   };
 
-    try {
-      await addEvent(newEvent);
-      fetchEvents(); // refresh list
-    } catch (error) {
-      console.error("Error adding event:", error);
-    }
-  };
+  //   try {
+  //     await addEvent(newEvent);
+  //     fetchEvents(); // refresh list
+  //   } catch (error) {
+  //     console.error("Error adding event:", error);
+  //   }
+  // };
 
   // 🔹 Toggle jobDone
   const handleToggleDone = async (event) => {
@@ -101,19 +101,7 @@ const Events = () => {
     <div style={{ padding: "20px" }}>
       <h1>Events</h1>
 
-      <div
-        style={{
-          width: "450px",
-          height: "80px",
-          backgroundColor: "orange",
-          borderRadius: "5px",
-          display:"grid"
-        }}
-      >
-
-
-
-      </div>
+     
 
       <button onClick={() => setIsModalOpen(true)}>Add Event</button>
 

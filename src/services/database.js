@@ -1,5 +1,4 @@
 import { db } from "../firebase/firebaseConfig";
- 
 
 import {
   collection,
@@ -8,7 +7,7 @@ import {
   doc,
   updateDoc,
   deleteDoc,
-  onSnapshot
+  onSnapshot,
 } from "firebase/firestore";
 
 //
@@ -35,6 +34,11 @@ export const addHouse = async (house) => {
     notes: house.notes || "",
 
     lastCleaners: house.lastCleaners || [],
+
+    notes: house.notes || "",
+    paymentHistory: house.paymentHistory || [],
+
+    payMethod: house.payMethod || "",
   });
 };
 
@@ -55,6 +59,7 @@ export const updateHouse = async (id, updatedData) => {
     address: updatedData.address,
     phone: updatedData.phone,
     price: Number(updatedData.price),
+    payMethod: updatedData.payMethod || "",
     frequency: updatedData.frequency,
     notes: updatedData.notes || "",
     lastCleaners: updatedData.lastCleaners || [],
@@ -142,17 +147,14 @@ export const subscribeToEvents = (callback) => {
 
 export const addEvent = async (event) => {
   await addDoc(collection(db, "events"), {
-    title: event.title || "",
+    house: event.house || {},
     date: event.date || "",
-    description: event.description || "",
-    cleaner1: event.cleaner1 || "",
-    cleaner2: event.cleaner2 || "",
-    cleaner1Pay: Number(event.cleaner1Pay) || 0,
-    cleaner2Pay: Number(event.cleaner2Pay) || 0,
-    amount: Number(event.amount) || 0,
+    timeOfCleaning: event.timeOfCleaning || {},
+    cleanersList: event.cleanersList || [],
     jobDone: event.jobDone || false,
     paid: event.paid || false,
     payType: event.payType || "",
+    notes: event.notes || "",
   });
 };
 

@@ -5,7 +5,6 @@ import HouseCard from "../components/HouseCard";
 import AddHouseModal from "../components/AddHouseModal";
 
 const Houses = ({ goToDetails }) => {
-
   const { houses, setHouses } = useStore();
   const [showModal, setShowModal] = useState(false);
 
@@ -15,42 +14,31 @@ const Houses = ({ goToDetails }) => {
 
   const load = async () => {
     const data = await getHouses();
-    setHouses(data);
+    const sortedHouses = [...data].sort((a, b) =>
+      (a.name || "").localeCompare(b.name || "")
+    );
+    setHouses(sortedHouses);
   };
 
   return (
-
     <div>
-
       <h1>Houses</h1>
-
-      <button onClick={() => setShowModal(true)}>
-        + Add House
-      </button>
-
+      Number of houses: {houses.length}
+      <br></br>
+      <button onClick={() => setShowModal(true)}>+ Add House</button>
       <div className="cardGrid">
-
         {houses.map((house) => (
-
           <HouseCard
             key={house.id}
             house={house}
             onClick={() => goToDetails(house)}
           />
-
         ))}
-
       </div>
-
       {showModal && (
-        <AddHouseModal
-          onClose={() => setShowModal(false)}
-          onAdded={load}
-        />
+        <AddHouseModal onClose={() => setShowModal(false)} onAdded={load} />
       )}
-
     </div>
-
   );
 };
 
