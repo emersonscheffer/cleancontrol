@@ -9,6 +9,8 @@ import {
   updateEvent,
   deleteEvent,
   subscribeToEvents,
+  getCleaners,
+  updateCleaner,
 } from "../services/database";
 
 const Events = () => {
@@ -66,6 +68,28 @@ const Events = () => {
   // 🔹 Toggle jobDone
   const handleToggleDone = async (event) => {
     try {
+      const isMarkingAsDone = !event.jobDone;
+
+      // If marking as done, add cleaner amounts to their wallets
+      if (isMarkingAsDone && event.cleanersList && event.cleanersList.length > 0) {
+        const cleaners = await getCleaners();
+
+        for (const cleaner of event.cleanersList) {
+          const cleanerInDb = cleaners.find(
+            (c) => c.name.toLowerCase() === cleaner.name.toLowerCase()
+          );
+
+          if (cleanerInDb) {
+            const newWallet = (cleanerInDb.wallet || 0) + (cleaner.amount || 0);
+            await updateCleaner(cleanerInDb.id, {
+              name: cleanerInDb.name,
+              wallet: newWallet,
+              jobList: cleanerInDb.jobList || [],
+            });
+          }
+        }
+      }
+
       await updateEvent(event.id, {
         jobDone: !event.jobDone,
       });

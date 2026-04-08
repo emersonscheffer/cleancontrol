@@ -45,7 +45,7 @@ const HouseCard = ({ house, onClick }) => {
       </p>
 
       <div className="cardFooter">
-        <strong>${house.price}</strong>
+        <strong style={{ color: 'green', fontWeight: "bold" }}>${house.price}</strong>
       </div>
     </div>
   );
