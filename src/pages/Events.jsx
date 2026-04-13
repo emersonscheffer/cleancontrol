@@ -69,24 +69,35 @@ const Events = () => {
   const handleToggleDone = async (event) => {
     try {
       const isMarkingAsDone = !event.jobDone;
+      const cleaners = await getCleaners();
+      const time = `${event.timeOfCleaning?.timeHour || ""}:${event.timeOfCleaning?.timeMinute || ""} ${event.timeOfCleaning?.timePeriod || ""}`.trim();
 
-      // If marking as done, add cleaner amounts to their wallets
-      if (isMarkingAsDone && event.cleanersList && event.cleanersList.length > 0) {
-        const cleaners = await getCleaners();
+      for (const cleaner of event.cleanersList || []) {
+        const cleanerInDb = cleaners.find(
+          (c) => c.name.toLowerCase() === cleaner.name.toLowerCase()
+        );
 
-        for (const cleaner of event.cleanersList) {
-          const cleanerInDb = cleaners.find(
-            (c) => c.name.toLowerCase() === cleaner.name.toLowerCase()
-          );
-
-          if (cleanerInDb) {
-            const newWallet = (cleanerInDb.wallet || 0) + (cleaner.amount || 0);
-            await updateCleaner(cleanerInDb.id, {
-              name: cleanerInDb.name,
-              wallet: newWallet,
-              jobList: cleanerInDb.jobList || [],
-            });
+        if (cleanerInDb) {
+          let newWallet = cleanerInDb.wallet || 0;
+          if (isMarkingAsDone) {
+            newWallet += cleaner.amount || 0;
+          } else {
+            newWallet -= cleaner.amount || 0;
           }
+
+          // Update jobDone in jobList
+          const updatedJobList = (cleanerInDb.jobList || []).map(job => {
+            if (job.date === event.date && job.time === time && job.houseName === event.house?.name) {
+              return { ...job, jobDone: !event.jobDone };
+            }
+            return job;
+          });
+
+          await updateCleaner(cleanerInDb.id, {
+            name: cleanerInDb.name,
+            wallet: newWallet,
+            jobList: updatedJobList,
+          });
         }
       }
 

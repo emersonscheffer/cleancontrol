@@ -7,6 +7,14 @@
   background: #fff;
 }
 
+.job-list-item.done {
+  background-color: lightgreen;
+}
+
+.job-list-item.pending {
+  background-color: lightcoral;
+}
+
 .job-date-time {
   font-size: 14px;
   color: #333;
